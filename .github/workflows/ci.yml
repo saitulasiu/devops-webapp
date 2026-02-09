@@ -21,3 +21,10 @@ jobs:
       - name: Test step
         run: |
           echo "No tests configured"
+          - name: Send Slack notification
+  if: always()
+  run: |
+    curl -X POST -H 'Content-type: application/json' \
+    --data '{"text":"CI Pipeline completed successfully for devops-webapp"}' \
+    ${{ secrets.SLACK_WEBHOOK }}
+
