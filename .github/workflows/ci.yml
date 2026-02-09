@@ -20,10 +20,10 @@ jobs:
 
     - name: Send Slack notification
       if: always()
-      run: |
-        curl -X POST -H 'Content-type: application/json' \
-        --data '{"text":"CI Pipeline completed for devops-webapp. Status: ${{ job.status }}"}' \
-        ${{ secrets.SLACK_WEBHOOK_URL }}
+     curl -X POST -H 'Content-type: application/json' \
+    --data '{"text":"CI Pipeline completed for devops-webapp. Status: ${{ job.status }}"}' \
+    ${{ secrets.SLACK_WEBHOOK }}
+
 
 
 
