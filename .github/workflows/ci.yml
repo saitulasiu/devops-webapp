@@ -2,29 +2,27 @@ name: CI Pipeline
 
 on:
   push:
-    branches:
-      - main
+    branches: [ "main" ]
 
 jobs:
   build:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
+    - name: Checkout code
+      uses: actions/checkout@v4
 
-      - name: Build static site
-        run: |
-          echo "Building the static website"
-          ls -la
+    - name: Build project
+      run: echo "Building project..."
 
-      - name: Test step
-        run: |
-          echo "No tests configured"
-          - name: Send Slack notification
-  if: always()
-  run: |
-    curl -X POST -H 'Content-type: application/json' \
-    --data '{"text":"CI Pipeline completed successfully for devops-webapp"}' \
-    ${{ secrets.SLACK_WEBHOOK }}
+    - name: Run tests
+      run: echo "Running tests..."
+
+    - name: Send Slack notification
+      if: always()
+      run: |
+        curl -X POST -H 'Content-type: application/json' \
+        --data '{"text":"CI Pipeline Status: ${{ job.status }}"}' \
+        ${{ secrets.SLACK_WEBHOOK_URL }}
+
 
