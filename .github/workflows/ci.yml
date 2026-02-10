@@ -2,29 +2,44 @@ name: CI Pipeline
 
 on:
   push:
-    branches: [ main ]
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
 
 jobs:
-  build:
+  build-test:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v4
+      # 1. Checkout code
+      - name: Checkout repository
+        uses: actions/checkout@v4
 
-    - name: Build project
-      run: echo "Build successful"
+      # 2. Build project (for static HTML)
+      - name: Build project
+        run: |
+          echo "Building the project..."
+          ls -la
+          echo "Build completed successfully"
 
-    - name: Run tests
-      run: echo "Tests passed"
+      # 3. Run tests (basic validation)
+      - name: Run tests
+        run: |
+          echo "Running tests..."
+          if [ -f index.html ]; then
+            echo "index.html found ✅"
+          else
+            echo "index.html not found ❌"
+            exit 1
+          fi
+          echo "Tests passed successfully"
 
-    - name: Send Slack notification
-      if: always()
-     curl -X POST -H 'Content-type: application/json' \
-    --data '{"text":"CI Pipeline completed for devops-webapp. Status: ${{ job.status }}"}' \
-    ${{ secrets.SLACK_WEBHOOK }}
-
-
-
+      # 4. Generate output logs
+      - name: Generate logs
+        run: |
+          echo "CI Pipeline completed at $(date)" >> ci-log.txt
+          cat ci-log.txt
 
 
