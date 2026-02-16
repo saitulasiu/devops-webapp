@@ -1,5 +1,4 @@
-
-  name: CI Pipeline
+name: CI Pipeline
 
 on:
   push:
@@ -11,11 +10,9 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # 1. Checkout code
       - name: Checkout code
         uses: actions/checkout@v4
 
-      # 2. Build project (static HTML build simulation)
       - name: Build project
         run: |
           echo "Building project..."
@@ -23,7 +20,6 @@ jobs:
           cp index.html build/
           echo "Build completed successfully"
 
-      # 3. Run tests (basic check)
       - name: Run tests
         run: |
           echo "Running tests..."
@@ -34,19 +30,18 @@ jobs:
             exit 1
           fi
 
-      # 4. Generate output logs
       - name: Generate logs
         run: |
           echo "CI pipeline executed on $(date)" > ci-log.txt
           cat ci-log.txt
 
-      # 5. Send Slack notification (FINAL STEP)
       - name: Send Slack notification
         if: always()
         run: |
           curl -X POST -H 'Content-type: application/json' \
           --data "{\"text\":\"✅ CI Pipeline completed for *devops-webapp*\\nStatus: *${{ job.status }}*\"}" \
           ${{ secrets.SLACK_WEBHOOK }}
+
 
 
 
